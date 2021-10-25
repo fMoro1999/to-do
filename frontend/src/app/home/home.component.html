@@ -1,0 +1,5 @@
+<todo-message [message]="alert"></todo-message>
+<todo-tasks
+  (deleteItemMessage)="onItemMessage($event)"
+  (itemStatusChangeMessage)="onItemMessage($event)"
+></todo-tasks>
