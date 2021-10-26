@@ -5,14 +5,16 @@ EXPOSE 5000
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
-COPY to-do.csproj .
-RUN dotnet restore "to-do.csproj"
+
+COPY ["backend/to-do.csproj", "backend/"]
+RUN dotnet restore "backend/to-do.csproj"
+
 COPY . .
-RUN dotnet build "to-do.csproj" -c Release -o /app/build
+RUN dotnet build "backend/to-do.csproj" -c Release -o /app/build
 
 
 FROM build AS publish
-RUN dotnet publish "to-do.csproj" -c Release -o /app/publish
+RUN dotnet publish "backend/to-do.csproj" -c Release -o /app/publish
 
 
 FROM base AS final

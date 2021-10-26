@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  todo-client:
+    restart: always
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - '4200:4200'
+    volumes:
+      - 'frontend:/app'
+
+  todo-db:
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - '27017:27017'
+
+  todo-api:
+    restart: always
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      MongoConnection__ConnectionString: mongodb://todo-db:27017
+    depends_on:
+      - todo-db
+volumes:
+  mongodata:
+  frontend:
