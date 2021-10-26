@@ -32,4 +32,9 @@ services:
       - todo-db
 volumes:
   mongodata:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mongodb/database
   frontend:
