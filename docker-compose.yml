@@ -14,8 +14,12 @@ services:
   todo-db:
     image: mongo:latest
     restart: always
+    environment:
+      - MONGO_INITDB_DATABASE=ToDoStoreDb
     volumes:
       - mongodata:/data/db
+      # This script will be launch if ./mongodb/database/ is empty (DB does not exist). Otherwise, it will be ignored by docker routines
+      - ./mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
     ports:
       - '27017:27017'
 
@@ -26,15 +30,16 @@ services:
       dockerfile: backend/Dockerfile
     ports:
       - 5000:5000
-    environment:
-      MongoConnection__ConnectionString: mongodb://todo-db:27017
+    #environment:
+      #MongoConnection__ConnectionString: mongodb://todo-db:27017
     depends_on:
       - todo-db
+      
 volumes:
   mongodata:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /mongodb/database
+      device: ./mongodb/database
   frontend:
